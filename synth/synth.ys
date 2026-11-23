@@ -1,0 +1,6 @@
+# Run from the repository root with an existing build/ directory.
+read_verilog rtl/watchdog_scan.v
+synth -top watchdog_scan
+check -assert
+tee -o build/cell_stats.txt stat
+write_verilog -noattr build/watchdog_scan_netlist.v
