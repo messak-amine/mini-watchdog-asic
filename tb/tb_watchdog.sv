@@ -49,7 +49,10 @@ module tb_watchdog;
     endtask
 
     initial begin
-        $dumpfile("build/watchdog.vcd");
+        if ($test$plusargs("gate"))
+            $dumpfile("build/watchdog_gate.vcd");
+        else
+            $dumpfile("build/watchdog.vcd");
         $dumpvars(0, tb_watchdog);
 
         #2;

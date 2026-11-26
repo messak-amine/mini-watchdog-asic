@@ -37,19 +37,20 @@ The GTKWave capture shows the count reload to `0A`, reach `00` at timeout, and t
 
 ## Synthesis
 
-Yosys 0.52 generated 49 generic cells, including 8 flip-flops. The `check -assert` structural check and the zero-delay netlist simulation both passed.
+The original Yosys 0.52 run reported 49 generic cells, including 8 flip-flops. The synthesis script runs `check -assert` and writes cell statistics, a log, and a Verilog netlist to `build/`. These are generic logic synthesis results, before technology mapping to an ASIC cell library.
 
 ## Run locally
 
-Run these targets from the repository root with GNU Make and the matching tool on `PATH`.
+Use Windows 10 or 11 and place the native Windows executables on `PATH`. Simulation requires Icarus Verilog (`iverilog.exe` and `vvp.exe`). Synthesis requires `yosys.exe` with its bundled ABC tool. GTKWave is optional for viewing waveforms. The batch flow omits Verilator lint because a working native installation has not been verified.
 
-```sh
-make sim     # RTL simulation with Icarus Verilog
-make lint    # RTL lint with Verilator
-make synth   # Generic synthesis with Yosys
-make gate    # Synthesize and simulate the netlist with the same testbench
+From PowerShell or Command Prompt in the repository root:
+
+```powershell
+.\run.bat sim     # Verilog-2001 RTL check and RTL simulation (default)
+.\run.bat synth   # Generic synthesis and structural check
+.\run.bat gate    # Synthesis and zero-delay gate-level simulation
+.\run.bat all     # RTL simulation, synthesis, and gate-level simulation
+.\run.bat clean   # Remove the generated build directory
 ```
 
-On Windows, `run.bat` runs the RTL simulation with Icarus Verilog. Open `build/watchdog.vcd` in GTKWave.
-
-The [RTL checks workflow](https://github.com/messak-amine/mini-watchdog-asic/actions/workflows/rtl.yml) runs these checks on Linux and publishes the synthesis log, cell stats, netlist, and waveforms as `watchdog-results`.
+Both simulations use the same self-checking testbench. Open `build/watchdog.vcd` for RTL or `build/watchdog_gate.vcd` for the netlist.
